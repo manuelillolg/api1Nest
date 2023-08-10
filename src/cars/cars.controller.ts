@@ -17,8 +17,8 @@ export class CarsController {
 
     @Get(':id')
     //No pongo @Param('id') id:string porque por defecto se extrae un string
-    getCarById( @Param('id',ParseIntPipe) id:number){
-        return this.carsService.findOneById(Number(id));
+    getCarById( @Param('id') id:string){
+        return this.carsService.findOneById(id);
     }
 
     @Post()
@@ -29,13 +29,13 @@ export class CarsController {
     @Patch(':id')
     updateCar(
         @Body() body: any,
-        @Param('id',ParseIntPipe) id:number)
+        @Param('id') id:string)
     {
             return body;
     }
 
     @Delete(':id')
-    deleteCar(@Param('id',ParseIntPipe) id:number){
+    deleteCar(@Param('id') id:string){
         return {
             method: 'delete',
             id
