@@ -1,5 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, Post, Body,Patch, Delete} from '@nestjs/common';
+import { Controller, Get, Param, Post, Body,Patch, Delete, ParseUUIDPipe, UsePipes, ValidationPipe} from '@nestjs/common';
 import { CarsService } from './cars.service';
+import { CreateCarDTO } from 'src/dto/create-car.dto';
+import { UpdateCarDTO } from 'src/dto/update-car.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -17,29 +19,26 @@ export class CarsController {
 
     @Get(':id')
     //No pongo @Param('id') id:string porque por defecto se extrae un string
-    getCarById( @Param('id') id:string){
+    getCarById( @Param('id',ParseUUIDPipe) id:string){
         return this.carsService.findOneById(id);
     }
 
     @Post()
-    createCar(@Body() body: any){
-        return body;
+    createCar(@Body() createCarDTO: CreateCarDTO){
+        return this.carsService.create(createCarDTO);
     }
 
     @Patch(':id')
     updateCar(
-        @Body() body: any,
-        @Param('id') id:string)
+        @Body() updateCarDTO: UpdateCarDTO,
+        @Param('id', ParseUUIDPipe) id:string)
     {
-            return body;
+            return this.carsService.update(id,updateCarDTO);
     }
 
     @Delete(':id')
-    deleteCar(@Param('id') id:string){
-        return {
-            method: 'delete',
-            id
-        }
+    deleteCar(@Param('id', ParseUUIDPipe) id:string){
+        return this.carsService.delete(id);
     }
 
 }
